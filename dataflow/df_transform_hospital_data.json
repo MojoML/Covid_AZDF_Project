@@ -26,7 +26,15 @@
 					"name": "DateLookup"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_processed_hospital_days",
+						"type": "DatasetReference"
+					},
+					"name": "SinkDayData"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectDayData"
@@ -183,7 +191,14 @@
 				"LookupDates aggregate(groupBy(RenameColumnsWeek@date,",
 				"          RenameColumnsWeek@year_week),",
 				"     reported_start_date = min(RenameColumnsWeek@date),",
-				"          reported_end_date = max(RenameColumnsWeek@date)) ~> aggregate1"
+				"          reported_end_date = max(RenameColumnsWeek@date)) ~> aggregate1",
+				"PrepareForSinkDay sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkDayData"
 			]
 		}
 	}
