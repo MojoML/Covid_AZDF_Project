@@ -434,6 +434,35 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_processed_hospital_week')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_azdatalakecovproject",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "hospital_week",
+						"folderPath": "ecdc",
+						"fileSystem": "processed"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_azdatalakecovproject')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_raw_cases_and_deaths')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1059,6 +1088,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "SinkDayData"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_processed_hospital_week",
+								"type": "DatasetReference"
+							},
+							"name": "SinkWeekData"
 						}
 					],
 					"transformations": [
@@ -1093,7 +1129,13 @@
 							"name": "LookupDates"
 						},
 						{
-							"name": "aggregate1"
+							"name": "GetWeekDates"
+						},
+						{
+							"name": "JoinToDates"
+						},
+						{
+							"name": "PrepareForSinkWeek"
 						}
 					],
 					"scriptLines": [
@@ -1214,17 +1256,40 @@
 						"     multiple: false,",
 						"     pickup: 'any',",
 						"     broadcast: 'auto')~> LookupDates",
-						"LookupDates aggregate(groupBy(RenameColumnsWeek@date,",
-						"          RenameColumnsWeek@year_week),",
-						"     reported_start_date = min(RenameColumnsWeek@date),",
-						"          reported_end_date = max(RenameColumnsWeek@date)) ~> aggregate1",
+						"LookupDates aggregate(groupBy(RenameColumnsWeek@year_week),",
+						"     reported_week_start_date = min(RenameColumnsWeek@date),",
+						"          reported_week_end_date = max(RenameColumnsWeek@date)) ~> GetWeekDates",
+						"LookupDates, GetWeekDates join(RenameColumnsWeek@year_week == GetWeekDates@year_week,",
+						"     joinType:'inner',",
+						"     broadcast: 'auto')~> JoinToDates",
+						"JoinToDates select(mapColumn(",
+						"          country = RenameColumnsWeek@country,",
+						"          country_code_2_digit,",
+						"          country_code_3_digit,",
+						"          population,",
+						"          reported_year_week = RenameColumnsWeek@year_week,",
+						"          reported_week_start_date,",
+						"          reported_week_end_date,",
+						"          new_hospital_occupancy_count,",
+						"          new_icu_occupancy_count,",
+						"          source",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> PrepareForSinkWeek",
 						"PrepareForSinkDay sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SinkDayData"
+						"     skipDuplicateMapOutputs: true) ~> SinkDayData",
+						"PrepareForSinkWeek sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkWeekData"
 					]
 				}
 			},
@@ -1232,7 +1297,8 @@
 				"[concat(variables('factoryId'), '/datasets/ds_raw_hospital_data')]",
 				"[concat(variables('factoryId'), '/datasets/df_country_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_date_lookup')]",
-				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_days')]"
+				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_days')]",
+				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_week')]"
 			]
 		},
 		{
@@ -1281,36 +1347,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/df_transform_cases_death')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_ingest_ecdc_data')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_ingest_ecdc_data",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-03-10T11:05:00",
-						"timeZone": "W. Europe Standard Time"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ingest_ecdc_data')]"
 			]
 		}
 	]
