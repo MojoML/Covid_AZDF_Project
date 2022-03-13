@@ -36,15 +36,15 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_transform_hospital_data",
+								"referenceName": "df_transform_hospital_admissions",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"HospitalData": {},
-									"CountryCodes": {},
+									"HospitalAdmissionsSource": {},
+									"CountrySource": {},
 									"DateLookup": {},
-									"SinkDayData": {},
-									"SinkWeekData": {}
+									"WeeklySink": {},
+									"DailySink": {}
 								}
 							},
 							"staging": {},
