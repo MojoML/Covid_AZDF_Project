@@ -1,17 +1,18 @@
 {
-	"name": "df_country_lookup",
+	"name": "ds_country_lookup",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_ablob_azstoragecovproject",
+			"referenceName": "ls_adls_azdatalakecovproject",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "country_lookup.csv",
-				"container": "lookup"
+				"folderPath": "dim_country",
+				"fileSystem": "lookup"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

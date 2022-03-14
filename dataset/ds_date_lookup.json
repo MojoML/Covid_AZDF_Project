@@ -2,16 +2,17 @@
 	"name": "ds_date_lookup",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_ablob_azstoragecovproject",
+			"referenceName": "ls_adls_azdatalakecovproject",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "dim_date.csv",
-				"container": "lookup"
+				"folderPath": "dim_date",
+				"fileSystem": "lookup"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

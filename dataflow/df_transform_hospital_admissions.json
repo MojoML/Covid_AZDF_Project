@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "df_country_lookup",
+						"referenceName": "ds_country_lookup",
 						"type": "DatasetReference"
 					},
 					"name": "CountrySource"
@@ -150,8 +150,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectReqFields2",
-				"SelectReqFields2 split(indicator == \"Daily hospital occupancy\" || indicator == \"Daily ICU occupancy\"\r",
-				",",
+				"SelectReqFields2 split(indicator == \"Daily hospital occupancy\" || indicator == \"Daily ICU occupancy\",",
 				"     disjoint: false) ~> DateOutput@(Daily, Weekly)",
 				"DateLookup derive(ecdc_year_week = year + \"-W\" + lpad(week_of_year, 2, \"0\")) ~> DeriveECDCYearWeek",
 				"DeriveECDCYearWeek aggregate(groupBy(ecdc_year_week),",
