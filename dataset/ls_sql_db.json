@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "sqlcov",
-			"table": "cases_and_deaths"
+			"table": "cases_deaths"
 		}
 	}
 }
