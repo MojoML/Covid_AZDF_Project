@@ -9,8 +9,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "sqlcov",
-			"table": "cases_deaths"
+			"schema": "cases_deaths",
+			"table": ""
 		}
 	}
 }
