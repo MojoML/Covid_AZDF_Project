@@ -465,21 +465,22 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/df_country_lookup')]",
+			"name": "[concat(parameters('factoryName'), '/ds_country_lookup')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_ablob_azstoragecovproject",
+					"referenceName": "ls_adls_azdatalakecovproject",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation",
+						"type": "AzureBlobFSLocation",
 						"fileName": "country_lookup.csv",
-						"container": "lookup"
+						"folderPath": "dim_country",
+						"fileSystem": "lookup"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -510,7 +511,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_azstoragecovproject')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_azdatalakecovproject')]"
 			]
 		},
 		{
@@ -519,16 +520,17 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_ablob_azstoragecovproject",
+					"referenceName": "ls_adls_azdatalakecovproject",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobStorageLocation",
+						"type": "AzureBlobFSLocation",
 						"fileName": "dim_date.csv",
-						"container": "lookup"
+						"folderPath": "dim_date",
+						"fileSystem": "lookup"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -587,7 +589,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_ablob_azstoragecovproject')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_azdatalakecovproject')]"
 			]
 		},
 		{
@@ -862,7 +864,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "cases_deaths.csv",
-						"folderPath": "ecdc",
+						"folderPath": "ecdc/cases_deaths",
 						"fileSystem": "raw"
 					},
 					"columnDelimiter": ",",
@@ -928,7 +930,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": "hospital_admissions.csv",
-						"folderPath": "ecdc",
+						"folderPath": "ecdc/hospital_admissions",
 						"fileSystem": "raw"
 					},
 					"columnDelimiter": ",",
@@ -1098,7 +1100,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "df_country_lookup",
+								"referenceName": "ds_country_lookup",
 								"type": "DatasetReference"
 							},
 							"name": "CountryLookup"
@@ -1208,7 +1210,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_raw_cases_and_deaths')]",
-				"[concat(variables('factoryId'), '/datasets/df_country_lookup')]",
+				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_cases_and_deaths')]"
 			]
 		},
@@ -1229,7 +1231,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "df_country_lookup",
+								"referenceName": "ds_country_lookup",
 								"type": "DatasetReference"
 							},
 							"name": "CountrySource"
@@ -1446,7 +1448,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_raw_hospital_data')]",
-				"[concat(variables('factoryId'), '/datasets/df_country_lookup')]",
+				"[concat(variables('factoryId'), '/datasets/ds_country_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_date_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_week')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_days')]"
