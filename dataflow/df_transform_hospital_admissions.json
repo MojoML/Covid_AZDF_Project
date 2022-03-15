@@ -213,6 +213,7 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectForSinkWeekly",
 				"SelectForSinkWeekly sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
@@ -221,13 +222,13 @@
 				"     skipDuplicateMapOutputs: true) ~> WeeklySink",
 				"SelectForSinkDaily sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     format: 'parquet') ~> DailySink"
+				"     skipDuplicateMapOutputs: true) ~> DailySink"
 			]
 		}
 	}
