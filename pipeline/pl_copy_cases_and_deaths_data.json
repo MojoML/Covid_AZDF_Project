@@ -53,7 +53,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ls_sql_db",
+						"referenceName": "ds_cases_deaths_sql_db",
 						"type": "DatasetReference"
 					}
 				]

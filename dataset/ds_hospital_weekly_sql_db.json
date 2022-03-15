@@ -1,0 +1,16 @@
+{
+	"name": "ds_hospital_weekly_sql_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azure_sql_db",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "sql_cov",
+			"table": "hospital_admissions_weekly"
+		}
+	}
+}

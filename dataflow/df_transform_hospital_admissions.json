@@ -36,7 +36,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_processed_hospital_days",
+						"referenceName": "ds_processed_hospital_daily",
 						"type": "DatasetReference"
 					},
 					"name": "DailySink"
@@ -220,6 +220,7 @@
 				"     skipDuplicateMapOutputs: true) ~> WeeklySink",
 				"SelectForSinkDaily sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
