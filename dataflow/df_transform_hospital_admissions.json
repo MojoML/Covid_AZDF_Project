@@ -191,7 +191,7 @@
 				"          country_code_3_digit,",
 				"          population,",
 				"          reported_date,",
-				"          {hospital occupancy_count} = {Daily hospital occupancy_count},",
+				"          hospital_occupancy_count = {Daily hospital occupancy_count},",
 				"          icu_occupancy_count = {Daily ICU occupancy_count},",
 				"          source",
 				"     ),",
@@ -220,12 +220,12 @@
 				"     skipDuplicateMapOutputs: true) ~> WeeklySink",
 				"SelectForSinkDaily sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'parquet',",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> DailySink"
+				"     skipDuplicateMapOutputs: true,",
+				"     format: 'parquet') ~> DailySink"
 			]
 		}
 	}
