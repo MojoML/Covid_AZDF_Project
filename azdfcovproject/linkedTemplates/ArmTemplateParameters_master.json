@@ -11,6 +11,9 @@
 		"ls_adls_azdatalakecovproject_accountKey": {
 			"value": ""
 		},
+		"ls_azure_sql_db_connectionString": {
+			"value": ""
+		},
 		"ls_db_covid_cluster_accessToken": {
 			"value": ""
 		},
