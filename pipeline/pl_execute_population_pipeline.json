@@ -1,0 +1,44 @@
+{
+	"name": "pl_execute_population_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "IngestPopulation",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_ingest_population_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ProcessPopulation",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "IngestPopulation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_process_population_data",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "execute"
+		},
+		"annotations": []
+	}
+}
