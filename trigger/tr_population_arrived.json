@@ -1,0 +1,17 @@
+{
+	"name": "tr_population_arrived",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/population/blobs/population_by_age.tsv.gz",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/ac51013d-8cee-418a-a63d-9aa071e96189/resourceGroups/mory_demos/providers/Microsoft.Storage/storageAccounts/azstoragecovproject",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
