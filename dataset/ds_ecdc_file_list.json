@@ -5,6 +5,9 @@
 			"referenceName": "ls_ablob_azstoragecovproject",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "lookup"
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
