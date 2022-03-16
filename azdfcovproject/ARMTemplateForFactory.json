@@ -204,6 +204,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "sql_copy"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -265,6 +268,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "sql_copy"
 				},
 				"annotations": []
 			},
@@ -453,6 +459,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "sql_copy"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -596,6 +605,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "ingestion"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-03-10T11:06:19Z"
@@ -786,6 +798,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "ingestion"
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-03-09T14:58:06Z"
 			},
@@ -835,6 +850,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "transformation"
 				},
 				"annotations": []
 			},
@@ -886,6 +904,9 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"folder": {
+					"name": "transformation"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -922,6 +943,9 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "transformation"
 				},
 				"annotations": []
 			},
