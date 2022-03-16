@@ -154,6 +154,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "sql_copy"
+		},
 		"annotations": []
 	}
 }
