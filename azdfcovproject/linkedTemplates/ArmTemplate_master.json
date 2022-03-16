@@ -31,7 +31,7 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseURL}"
 		},
-		"tr_ingest_population_data_properties_typeProperties_scope": {
+		"tr_population_arrived_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/ac51013d-8cee-418a-a63d-9aa071e96189/resourceGroups/mory_demos/providers/Microsoft.Storage/storageAccounts/azstoragecovproject"
 		},
@@ -98,8 +98,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"tr_ingest_population_data_properties_typeProperties_scope": {
-						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"
+					"tr_population_arrived_properties_typeProperties_scope": {
+						"value": "[parameters('tr_population_arrived_properties_typeProperties_scope')]"
 					}
 				}
 			},
