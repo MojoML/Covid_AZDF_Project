@@ -25,6 +25,9 @@
 					"referenceName": "ls_adls_azdatalakecovproject",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "raw"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -80,6 +83,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_adls_azdatalakecovproject",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "processed"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -143,6 +149,9 @@
 				"linkedServiceName": {
 					"referenceName": "ls_azure_sql_db",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "sql_datasets"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
