@@ -86,14 +86,15 @@
 							},
 							{
 								"source": {
-									"name": "cases_count",
+									"name": "confirmed_cases_count",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
 									"name": "cases_count",
 									"type": "Int64",
-									"physicalType": "bigint"
+									"physicalType": "bigint",
+									"precision": 19
 								}
 							},
 							{
