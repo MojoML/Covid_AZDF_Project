@@ -130,14 +130,15 @@
 									},
 									{
 										"source": {
-											"name": "cases_count",
+											"name": "confirmed_cases_count",
 											"type": "String",
 											"physicalType": "String"
 										},
 										"sink": {
 											"name": "cases_count",
 											"type": "Int64",
-											"physicalType": "bigint"
+											"physicalType": "bigint",
+											"precision": 19
 										}
 									},
 									{
@@ -467,6 +468,62 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_testing')]",
 				"[concat(variables('factoryId'), '/datasets/ds_testing_sql')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_execute_population_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestPopulation",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_ingest_population_data",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "ProcessPopulation",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "IngestPopulation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_process_population_data",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "execute"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ingest_population_data')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_process_population_data')]"
 			]
 		},
 		{
@@ -1885,6 +1942,36 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/tr_population_arrived')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_execute_population_pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/population/blobs/population_by_age.tsv.gz",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('tr_population_arrived_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_execute_population_pipeline')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/df_transform_cases_death')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1976,7 +2063,7 @@
 						"          population,",
 						"          source,",
 						"          reported_date),",
-						"     pivotBy(indicator, ['confirmed_cases', 'deaths']),",
+						"     pivotBy(indicator, ['confirmed cases', 'deaths']),",
 						"     count = sum(daily_count),",
 						"     columnNaming: '$V_$N',",
 						"     lateral: true) ~> PivotCounts",
@@ -1988,7 +2075,7 @@
 						"          country = PivotCounts@country,",
 						"          country_code_2_digit,",
 						"          country_code_3_digit,",
-						"          cases_count = confirmed_cases_count,",
+						"          confirmed_cases_count = {confirmed cases_count},",
 						"          deaths_count,",
 						"          population = PivotCounts@population,",
 						"          source,",
@@ -2257,92 +2344,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_date_lookup')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_weekly')]",
 				"[concat(variables('factoryId'), '/datasets/ds_processed_hospital_daily')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_execute_population_pipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "IngestPopulation",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_ingest_population_data",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "ProcessPopulation",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "IngestPopulation",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_process_population_data",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "execute"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ingest_population_data')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_process_population_data')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_population_arrived')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_execute_population_pipeline",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/population/blobs/population_by_age.tsv.gz",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('tr_population_arrived_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_execute_population_pipeline')]"
 			]
 		}
 	]
