@@ -4,7 +4,7 @@
 
 ## Solution Architecture
 The Solution Architecture consists of the Data Integration Layer which ingests the Data from various Sources using Data Factory.
-This Data is transformed and aggregated using HDInsight and Databricks and finally made available for Machine Learning on Azure Data Lake and for  BI Purposes in a SQL Datawarehouse.
+This Data is transformed and aggregated using **HDInsight** and **Databricks** and finally made available for Machine Learning on Azure Data Lake and for BI Purposes in a **SQL Database**.
 
 
 <img width="789" alt="image" src="https://user-images.githubusercontent.com/60922141/159318803-bec4ce08-3bbe-4ef1-a475-a14bf7d880c5.png">
